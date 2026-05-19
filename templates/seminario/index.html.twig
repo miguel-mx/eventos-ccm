@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seminario index{% endblock %}
+
+{% block body %}
+
+    <style>
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="container my-5">
+        <h2>Seminarios Centro de Ciencias Matemáticas</h2>
+
+        <div class="row">
+            <div class="col-12 col-md-4">
+
+                <!-- Search Input with Icon -->
+                <div class="input-group mt-4 shadow-sm">
+                     <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="seminarSearch" class="form-control border-start-0" placeholder="Buscar seminario...">
+                </div>
+
+                <ul class="list-group list-group-flush mt-5" id="seminarList">
+                    {% for seminario in seminarios %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="seminario-title">
+                                <a href="{{ path('app_seminario_show', {'slug': seminario.slug}) }}">{{ seminario }}</a>
+                            </div>
+                            {% if env_token == token %}
+                                <a href="{{ path('app_event_seminar_new', {'id': seminario.id, 'token': env_token}) }}"><i class="bi bi-plus-circle"></i></a>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            ¡No se encontraron seminarios!
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('seminarSearch');
+            const listItems = document.querySelectorAll('#seminarList li');
+
+            searchInput.addEventListener('input', function () {
+
+                console.log('User typed:', this.value); // Check if this logs
+                const query = this.value.toLowerCase();
+
+                listItems.forEach(item => {
+                    const linkText = item.querySelector('a').textContent.toLowerCase();
+                    if (linkText.includes(query)) {
+                        item.style.display = ''; // Show item
+                        item.classList.add('d-flex');
+                    } else {
+                        item.style.display = 'none'; // Hide item
+                        item.classList.remove('d-flex');
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+Events from {{ startOfWeek|date('F j, Y') }} to {{ endOfWeek|date('F j, Y') }}
+
+{% if events %}
+{% for event in events %}
+
+ - {{ event.seminar.name }}
+   {{ event.title }}
+   {{ event.speaker }} {{ event.institution }}
+   {{ event.location}}
+   {{ event.start|date('l, F j, Y H:i') }}
+
+  {{ event.abstract|u.wordwrap(72) }}
+
+{% endfor %}
+{% else %}
+No events scheduled for next week.
+{% endif %}

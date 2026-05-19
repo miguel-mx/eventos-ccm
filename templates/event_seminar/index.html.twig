@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Eventos de la semana - CCM{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let calendarEl = document.getElementById('calendar');
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'listWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: '',
+                    right: ''
+                },
+                height: 500, // Fixed height in pixels
+                slotMinTime: "08:00:00", // ⬅ Start at 8 AM
+                slotMaxTime: "20:00:00", // ⬅ End at 8 PM
+                events: '/eventos/consulta/json', // Fetch events from your Symfony API
+                eventClick: function(info) {
+                    window.open(info.event.extendedProps.url, "_blank"); // Open in a new tab
+                    info.jsEvent.preventDefault(); // Prevent default browser behavior
+                },
+                eventContent: function(arg) {
+                    return {
+                        html: `<p class="fc-event-title fw-bold">${arg.event.extendedProps.description}</p>
+                               <div class="fc-event-info fw-bold">${arg.event.extendedProps.speaker}</div>
+                               <div class="fc-event-info">${arg.event.title}</div>`
+                    };
+                }
+            });
+            calendar.render();
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+
+    {# read and display all flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h1 class="mt-5">Seminarios Centro de Ciencias Matemáticas - UNAM</h1>
+    <h5 class="mb-5">From {{ startOfWeek|date('F j') }} to {{ endOfWeek|date('F j') }}</h5>
+
+  {#  <div class="event-card">
+        <div class="event-date">
+            <div class="event-month">Mar</div>
+            <div class="event-day">13</div>
+        </div>
+        <div class="event-info">
+            <div class="event-seminar">PROSPECTOS EN TOPOLOGIA</div>
+            <div class="event-title">General introduction to the unstable classification of complex vector bundles</div>
+            <div class="event-speaker-info d-flex">
+                <div class="event-speaker">Noé Bárcenas Torres</div> <div class="event-university">CCM UNAM</div>
+            </div>
+            <div class="d-flex">
+                <div class="event-time"><i class="bi bi-clock"></i> 11:00 horas</div><div class="event-place"><i class="bi bi-geo-alt"></i> Salón 9</div>
+            </div>
+        </div>
+    </div>#}
+
+    {% for event_seminar in event_seminars %}
+    <div class="event-card">
+        <div class="event-date">
+            <div class="event-month">{{ event_seminar.start|date('M') }}</div>
+            <div class="event-day">{{ event_seminar.start|date('d') }}</div>
+        </div>
+        <div class="event-info">
+            <div class="event-seminar">{{ event_seminar.seminar.name }}</div>
+            <div class="event-title">
+                <a href="{{ path('app_event_seminar_show', { slug: event_seminar.slug }) }}" class="event-link">
+                    {{ event_seminar.title }}
+                </a>
+            </div>
+            <div class="event-speaker-info d-flex">
+                <div class="event-speaker">{{ event_seminar.speaker}}</div> <div class="event-university">{{ event_seminar.institution }}</div>
+            </div>
+            <div class="d-flex">
+                <div class="event-time"><i class="bi bi-clock"></i> {{ event_seminar.start|date('H:i')}} horas</div><div class="event-place"><i class="bi bi-geo-alt"></i> {{event_seminar.location}}</div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <h4 class="">No se encontraron eventos programados para esta semana.</h4>
+        </div>
+    {% endfor %}
+
+    {# Display pagination controls #}
+    <div class="navigation mb-5">
+        {{ knp_pagination_render(event_seminars) }}
+    </div>
+
+
+    <div class="row my-5">
+        <div class="col-12 col-md-6">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    {#<table class="table my-5">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Location</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Speaker</th>
+                <th>Institution</th>
+                <th>Title</th>
+                <th>Abstract</th>
+                <th>Organizers</th>
+                <th>Slug</th>
+                <th>Url</th>
+                <th>Notes</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for event_seminar in event_seminars %}
+            <tr>
+                <td>{{ event_seminar.id }}</td>
+                <td>{{ event_seminar.location }}</td>
+                <td>{{ event_seminar.start ? event_seminar.start|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event_seminar.end ? event_seminar.end|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ event_seminar.speaker }}</td>
+                <td>{{ event_seminar.institution }}</td>
+                <td>{{ event_seminar.title }}</td>
+                <td>{{ event_seminar.abstract }}</td>
+                <td>{{ event_seminar.organizers }}</td>
+                <td>{{ event_seminar.slug }}</td>
+                <td>{{ event_seminar.url }}</td>
+                <td>{{ event_seminar.notes }}</td>
+                <td>{{ event_seminar.createdAt ? event_seminar.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_event_seminar_show', {'id': event_seminar.id}) }}">show</a>
+                    <a href="{{ path('app_event_seminar_edit', {'id': event_seminar.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+#}
+    </div>
+{% endblock %}

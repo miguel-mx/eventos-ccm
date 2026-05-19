@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Seminario{% endblock %}
+
+{% block body %}
+    <h1>Create new Seminario</h1>
+
+    {{ include('seminario/_form.html.twig') }}
+
+    <a href="{{ path('app_seminario_index') }}">back to list</a>
+{% endblock %}

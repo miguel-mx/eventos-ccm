@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Organizer{% endblock %}
+
+{% block body %}
+    <h1>Organizer</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ organizer.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ organizer.name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ organizer.email }}</td>
+            </tr>
+            <tr>
+                <th>Institution</th>
+                <td>{{ organizer.institution }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ organizer.slug }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_organizer_index') }}">back to list</a>
+
+    <a href="{{ path('app_organizer_edit', {'id': organizer.id}) }}">edit</a>
+
+    {{ include('organizer/_delete_form.html.twig') }}
+{% endblock %}

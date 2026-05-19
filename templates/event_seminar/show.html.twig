@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event_seminar.seminar.name }} - {{ event_seminar.title }}{% endblock %}
+
+{% block body %}
+
+    <div class="container p-5">
+
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-12 col-md-9">
+                <div class="event-detail-container">
+                    <a href="{{ path('app_seminario_show', { slug: event_seminar.seminar.slug }) }}"><div class="event-seminar mb-3">{{ event_seminar.seminar.name }}</div></a>
+                    <h1 class="fw-bold">{{ event_seminar.title }}</h1>
+                    <hr class="mb-3">
+                    <div class="mb-2"><strong>{{ event_seminar.speaker }}</strong>, {{ event_seminar.institution }}</div>
+                    <div class="mb-2"><i class="bi bi-calendar"></i> {{ event_seminar.start|date('F j, H:i') }} - {{ event_seminar.end|date('H:i') }}</div>
+                    <div class="mb-2"><i class="bi bi-geo-alt"></i> {{ event_seminar.location }}</div>
+                    <hr class="mb-3">
+                    <div class="mb-3">
+                        {{ event_seminar.abstract }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% set details = event_seminar.title ~ '\n' ~  event_seminar.speaker ~ ' - ' ~ event_seminar.institution ~ '\n\n' ~ event_seminar.abstract %}
+
+        <a href="{{ path('app_event_seminar_index') }}">Regresar a Eventos</a><br>
+        <a href="{{ path('event_calendar_export', {slug: event_seminar.slug}) }}">Download .ics (Apple/Outlook)</a><br>
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text={{ event_seminar.seminar.name|url_encode }}&dates={{ event_seminar.start|date('Ymd\\THis') }}/{{ event_seminar.end|date('Ymd\\THis') }}&details={{ details|url_encode }}&location={{ event_seminar.location|url_encode }}" target="_blank">Google Calendar</a><br>
+        <a class="dropdown-item" href="https://outlook.live.com/calendar/0/deeplink/compose?subject={{ event_seminar.seminar.name|url_encode }}&body={{ details|url_encode }}&startdt={{ event_seminar.start|date('c') }}&enddt={{ event_seminar.end|date('c') }}&location={{ event_seminar.location|url_encode }}" target="_blank">Outlook Online</a>
+
+        <div class="my-5">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Add to Calendar
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('event_calendar_export', {slug: event_seminar.slug}) }}">Download .ics (Apple/Outlook)</a></li>
+                    <li><a class="dropdown-item" href="https://www.google.com/calendar/render?action=TEMPLATE&text={{ event_seminar.title|url_encode }}&dates={{ event_seminar.start|date('Ymd\\THis') }}/{{ event_seminar.end|date('Ymd\\THis') }}&details={{ event_seminar.abstract|url_encode }}&location={{ event_seminar.location|url_encode }}" target="_blank">Google Calendar</a></li>
+                    {# <li><a class="dropdown-item" href="https://outlook.live.com/calendar/0/deeplink/compose?subject={{ event_seminar.title|url_encode }}&body={{ event_seminar.abstract|url_encode }}&startdt={{ event.date|date('c') }}&enddt={{ event.date.modify('+1 hour')|date('c') }}&location={{ event_seminar.location|url_encode }}" target="_blank">Outlook Online</a></li> #}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

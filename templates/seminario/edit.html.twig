@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Seminario{% endblock %}
+
+{% block body %}
+    <h1>Edit Seminario</h1>
+
+    {{ include('seminario/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_seminario_index') }}">back to list</a>
+
+    {{ include('seminario/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,93 @@
+{#{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}#}
+
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="mb-3">
+            <h4>Información del Evento</h4>
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.location, 'Lugar', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.location, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.location) }}
+        </div>
+    </div>
+</div>
+
+<div class="row flex-row justify-content-center">
+    <div class="col-12 col-md-2">
+        {% if form.start_date is defined %}
+            {{ form_label(form.start_date, 'Fecha', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.start_date, {'attr': {'class': 'form-control', 'id': 'event-start-date'}}) }}
+            {{ form_errors(form.start_date) }}
+        {% endif %}
+    </div>
+    <div class="col-12 col-md-2">
+        {% if form.start_time is defined %}
+            {{ form_label(form.start_time, 'Hora de inicio', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.start_time, {'attr': {'class': 'form-control', 'id': 'event-start-time'}}) }}
+            {{ form_errors(form.start_time) }}
+        {% endif %}
+
+    </div>
+    <div class="col-12 col-md-2">
+        {{ form_label(form.event_duration, 'Duración', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.event_duration) }}
+        {{ form_errors(form.event_duration) }}
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <hr class="m-y">
+
+        <h4>Información de la plática</h4>
+
+        <div class="mb-3">
+            {{ form_label(form.title, 'Título', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.speaker, 'Ponente', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.speaker, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.speaker) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.institution, 'Institución de origen', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.institution, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.institution) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.abstract, 'Resumen', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.abstract, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+            {{ form_errors(form.abstract) }}
+        </div>
+
+        {# URL Field #}
+        <div class="mb-3">
+            {{ form_label(form.url, 'URL', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.url, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.url) }}
+        </div>
+        {# Notes Field #}
+        <div class="mb-3">
+            {{ form_label(form.notes, 'Notas', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.notes, {'attr': {'class': 'form-control', 'rows': 2}}) }}
+            {{ form_errors(form.notes) }}
+        </div>
+
+        {# Submit Button #}
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-4">Save</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+
+

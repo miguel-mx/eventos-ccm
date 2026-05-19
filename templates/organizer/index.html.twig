@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Organizer index{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+
+    <h1 class="mb-3">Seminarios CCM</h1>
+    <h3 class="mb-5">Organizadores</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Seminario</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for organizer in organizers %}
+            <tr>
+                <td><a href="{{ path('app_organizer_show', {'id': organizer.id}) }}">{{ organizer.name }}</a></td>
+                <td>{{ organizer.email }}</td>
+                <td>{{ organizer.seminario }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="my-5">
+        <a href="{{ path('app_organizer_new') }}">New organizer</a>
+    </div>
+
+    </div>
+{% endblock %}
