@@ -28,6 +28,12 @@ class EventSeminarRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.start', 'DESC');
+    }
+
 
 //    /**
 //     * @return EventSeminar[] Returns an array of EventSeminar objects

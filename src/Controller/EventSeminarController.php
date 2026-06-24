@@ -20,28 +20,21 @@ final class EventSeminarController extends AbstractController
     #[Route(name: 'app_event_seminar_index', methods: ['GET'])]
     public function index(EventSeminarRepository $eventSeminarRepository, Request $request, PaginatorInterface $paginator): Response
     {
-
-        $today = new \DateTimeImmutable();
-        // Get the start of the week (Monday)
-        $startOfWeek = $today->modify(('Monday' === $today->format('l')) ? 'this monday' : 'last monday')->setTime(0, 0, 0);
-        // Get the end of the week (Sunday)
-        $endOfWeek = $startOfWeek->modify('+6 days')->setTime(23, 59, 59);
-
-        // Get events for this week
-        $queryBuilder = $eventSeminarRepository->findEventsBetweenDates($startOfWeek, $endOfWeek);
-
         $pagination = $paginator->paginate(
-            $queryBuilder,
+            $eventSeminarRepository->findAllQueryBuilder(),
             $request->query->getInt('page', 1),
-            8
+            10
         );
 
         return $this->render('event_seminar/index.html.twig', [
-            //'event_seminars' => $eventSeminarRepository->findAll(),
             'event_seminars' => $pagination,
-            'startOfWeek' => $startOfWeek,
-            'endOfWeek' => $endOfWeek,
         ]);
+    }
+
+    #[Route('/calendario', name: 'app_event_seminar_calendario', methods: ['GET'])]
+    public function calendario(): Response
+    {
+        return $this->render('event_seminar/calendario.html.twig');
     }
 
     #[Route('/new/{id}/{token}', name: 'app_event_seminar_new', methods: ['GET', 'POST'])]

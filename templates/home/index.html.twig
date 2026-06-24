@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Todos los Eventos - CCM{% endblock %}
+{% block title %}Seminarios CCM - UNAM{% endblock %}
 
 {% block body %}
 <div class="container py-5">
@@ -16,12 +16,12 @@
 
     <div class="d-flex justify-content-between align-items-start mb-2">
         <div>
-            <h1 class="mt-3">Todos los Eventos</h1>
-            <p class="text-muted">Centro de Ciencias Matemáticas - UNAM</p>
+            <h1 class="mt-3">Seminarios Centro de Ciencias Matemáticas - UNAM</h1>
+            <h5 class="mb-4 text-muted">Del {{ startOfWeek|date('j') }} al {{ endOfWeek|date('j \\d\\e F, Y') }}</h5>
         </div>
         <div class="mt-4 d-flex gap-2">
-            <a href="{{ path('app_home') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-house"></i> Esta semana
+            <a href="{{ path('app_event_seminar_index') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-list-ul"></i> Todos los eventos
             </a>
             <a href="{{ path('app_event_seminar_calendario') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-calendar3"></i> Calendario
@@ -54,13 +54,9 @@
     </div>
     {% else %}
         <div class="alert alert-warning">
-            <h4>No se encontraron eventos registrados.</h4>
+            <h4>No se encontraron eventos programados para esta semana.</h4>
         </div>
     {% endfor %}
-
-    <div class="navigation mb-5">
-        {{ knp_pagination_render(event_seminars) }}
-    </div>
 
 </div>
 {% endblock %}

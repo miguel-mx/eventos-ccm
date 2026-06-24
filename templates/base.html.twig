@@ -9,10 +9,12 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-            {#  encore_entry_script_tags('app') #}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
             {# MathJax Script (CDN) #}
             <script>
                 window.MathJax = {
@@ -21,10 +23,6 @@
                 };
             </script>
             <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
         {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
     </body>
 </html>
