@@ -1,72 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Seminario index{% endblock %}
+{% block title %}Seminarios · CCM{% endblock %}
 
 {% block body %}
+<div class="page-wrap">
 
-    <style>
-        .list-group-item:hover {
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
-    </style>
+    <div class="page-header">
+        <a href="{{ path('app_home') }}" class="breadcrumb-link">← Esta semana</a>
+        <h1 class="page-title">Seminarios</h1>
+    </div>
 
-    <div class="container my-5">
-        <h2>Seminarios Centro de Ciencias Matemáticas</h2>
-
-        <div class="row">
-            <div class="col-12 col-md-4">
-
-                <!-- Search Input with Icon -->
-                <div class="input-group mt-4 shadow-sm">
-                     <span class="input-group-text bg-white border-end-0">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    <input type="text" id="seminarSearch" class="form-control border-start-0" placeholder="Buscar seminario...">
-                </div>
-
-                <ul class="list-group list-group-flush mt-5" id="seminarList">
-                    {% for seminario in seminarios %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="seminario-title">
-                                <a href="{{ path('app_seminario_show', {'slug': seminario.slug}) }}">{{ seminario }}</a>
-                            </div>
-                            {% if env_token == token %}
-                                <a href="{{ path('app_event_seminar_new', {'id': seminario.id, 'token': env_token}) }}"><i class="bi bi-plus-circle"></i></a>
-                            {% endif %}
-                        </li>
-                    {% else %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            ¡No se encontraron seminarios!
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div style="max-width: 320px; margin-bottom: 1.75rem;">
+        <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white" style="border-color: var(--border);">
+                <i class="bi bi-search" style="color: var(--text-muted);"></i>
+            </span>
+            <input type="text" id="seminarSearch" class="form-control" placeholder="Buscar…" style="border-left: none;">
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('seminarSearch');
-            const listItems = document.querySelectorAll('#seminarList li');
+    <ul class="seminario-list" id="seminarList">
+        {% for seminario in seminarios %}
+        <li class="seminario-list-item">
+            <a href="{{ path('app_seminario_show', {'slug': seminario.slug}) }}">{{ seminario }}</a>
+            {% if is_authorized %}
+                <a href="{{ path('app_event_seminar_new', {'id': seminario.id}) }}" class="add-icon" title="Agregar evento">
+                    <i class="bi bi-plus-circle"></i>
+                </a>
+            {% endif %}
+        </li>
+        {% else %}
+        <li class="seminario-list-item">
+            <span style="color: var(--text-muted);">No se encontraron seminarios.</span>
+        </li>
+        {% endfor %}
+    </ul>
 
-            searchInput.addEventListener('input', function () {
+    <div class="page-actions">
+        <a href="{{ path('app_home') }}" class="action-link">← Esta semana</a>
+    </div>
 
-                console.log('User typed:', this.value); // Check if this logs
-                const query = this.value.toLowerCase();
+</div>
 
-                listItems.forEach(item => {
-                    const linkText = item.querySelector('a').textContent.toLowerCase();
-                    if (linkText.includes(query)) {
-                        item.style.display = ''; // Show item
-                        item.classList.add('d-flex');
-                    } else {
-                        item.style.display = 'none'; // Hide item
-                        item.classList.remove('d-flex');
-                    }
-                });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('seminarSearch');
+        const listItems = document.querySelectorAll('#seminarList li');
+
+        searchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            listItems.forEach(item => {
+                const link = item.querySelector('a');
+                if (!link) return;
+                item.style.display = link.textContent.toLowerCase().includes(query) ? '' : 'none';
             });
         });
-    </script>
+    });
+</script>
 
 {% endblock %}

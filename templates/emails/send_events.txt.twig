@@ -1,17 +1,32 @@
-Events from {{ startOfWeek|date('F j, Y') }} to {{ endOfWeek|date('F j, Y') }}
+SEMINARIOS CCM · UNAM
+Semana del {{ startOfWeek|format_datetime(pattern="d", locale='es') }} al {{ endOfWeek|format_datetime(pattern="d 'de' MMMM 'de' yyyy", locale='es') }}
 
-{% if events %}
 {% for event in events %}
+================================================================
 
- - {{ event.seminar.name }}
-   {{ event.title }}
-   {{ event.speaker }} {{ event.institution }}
-   {{ event.location}}
-   {{ event.start|date('l, F j, Y H:i') }}
+{{ event.seminar.name|upper }}
 
-  {{ event.abstract|u.wordwrap(72) }}
+{{ event.title }}
+{{ event.speaker }}{% if event.institution %} · {{ event.institution }}{% endif %}
 
-{% endfor %}
-{% else %}
-No events scheduled for next week.
+Fecha:  {{ event.start|format_datetime(pattern="EEEE, d 'de' MMMM 'de' yyyy", locale='es')|capitalize }}
+Hora:   {{ event.start|date('H:i') }} – {{ event.end|date('H:i') }} h
+Lugar:  {{ event.location }}
+{% if event.url %}
+URL:    {{ event.url }}
 {% endif %}
+{% if event.abstract %}
+
+Resumen:
+{{ event.abstract|u.wordwrap(72) }}
+{% endif %}
+
+Enlace: {{ url('app_event_seminar_show', {slug: event.slug}) }}
+
+{% else %}
+No hay eventos programados para esta semana.
+{% endfor %}
+================================================================
+
+© {{ "now"|date('Y') }} Centro de Ciencias Matemáticas · UNAM
+{{ url('app_home') }}

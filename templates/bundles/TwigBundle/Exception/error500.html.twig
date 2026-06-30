@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error del servidor · CCM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Ubuntu", sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            line-height: 1.65;
+        }
+
+        .site-header {
+            border-top: 3px solid #b25828;
+            padding: 1rem 2rem;
+        }
+
+        .site-name {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #999;
+            text-decoration: none;
+        }
+
+        .page-wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .error-block {
+            padding: 5rem 0 3rem;
+        }
+
+        .error-code {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #e5e4e2;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 0.75rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 0 0 0.5rem;
+        }
+
+        .links {
+            margin-top: 2rem;
+        }
+
+        .back-link {
+            font-size: 0.85rem;
+            color: #b25828;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover { color: #7e411d; }
+
+        @media (max-width: 575.98px) {
+            .site-header { padding: 0.75rem 1rem; }
+            .page-wrap { padding: 0 1rem 4rem; }
+            .error-code { font-size: 3.5rem; }
+            h1 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a href="/" class="site-name">Centro de Ciencias Matemáticas &middot; UNAM</a>
+    </header>
+
+    <div class="page-wrap">
+        <div class="error-block">
+            <div class="error-code">500</div>
+            <h1>Error del servidor</h1>
+            <p>Algo salió mal de nuestro lado. El problema ha sido registrado.</p>
+            <p>Por favor intenta de nuevo en unos momentos.</p>
+            <div class="links">
+                <a href="/" class="back-link">← Regresar al inicio</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Seminario{% endblock %}
+{% block title %}Editar Seminario · CCM{% endblock %}
 
 {% block body %}
-    <h1>Edit Seminario</h1>
+<div class="page-wrap">
 
-    {{ include('seminario/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="page-header">
+        <a href="{{ path('app_seminario_index') }}" class="breadcrumb-link">← Seminarios</a>
+        <h1 class="page-title">Editar seminario</h1>
+    </div>
 
-    <a href="{{ path('app_seminario_index') }}">back to list</a>
+    <div class="form-wrap">
+        {{ include('seminario/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+    </div>
 
-    {{ include('seminario/_delete_form.html.twig') }}
+    <div class="page-actions">
+        <a href="{{ path('app_seminario_index') }}" class="action-link">← Cancelar</a>
+        {{ include('seminario/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}

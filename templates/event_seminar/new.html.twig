@@ -1,19 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New EventSeminar{% endblock %}
+{% block title %}Nuevo Evento · {{ event_seminar.seminar.name }}{% endblock %}
 
 {% block body %}
-    <div class="container p-5">
+<div class="page-wrap">
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6 mb-5">
-                <h1>{{ event_seminar.seminar.name }}</h1>
-                <div>{{ event_seminar.seminar.organizers|map(o => o.name)|join(', ') }}</div>
-            </div>
-        </div>
-
-        {{ include('event_seminar/_form.html.twig') }}
-
-        <a href="{{ path('app_seminario_index') }}">Seminarios</a>
+    <div class="page-header">
+        <a href="{{ path('app_seminario_index') }}" class="breadcrumb-link">← Seminarios</a>
+        <h1 class="page-title">Nuevo evento</h1>
+        <p class="page-subtitle">{{ event_seminar.seminar.name }}</p>
     </div>
+
+    {{ include('event_seminar/_form.html.twig') }}
+
+</div>
 {% endblock %}

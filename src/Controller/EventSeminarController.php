@@ -20,14 +20,21 @@ final class EventSeminarController extends AbstractController
     #[Route(name: 'app_event_seminar_index', methods: ['GET'])]
     public function index(EventSeminarRepository $eventSeminarRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $q = trim($request->query->get('q', ''));
+
+        $query = $q !== ''
+            ? $eventSeminarRepository->searchQueryBuilder($q)
+            : $eventSeminarRepository->findAllQueryBuilder();
+
         $pagination = $paginator->paginate(
-            $eventSeminarRepository->findAllQueryBuilder(),
+            $query,
             $request->query->getInt('page', 1),
             10
         );
 
         return $this->render('event_seminar/index.html.twig', [
             'event_seminars' => $pagination,
+            'q' => $q,
         ]);
     }
 
@@ -37,33 +44,23 @@ final class EventSeminarController extends AbstractController
         return $this->render('event_seminar/calendario.html.twig');
     }
 
-    #[Route('/new/{id}/{token}', name: 'app_event_seminar_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Seminario $seminario, ?string $token = null): Response
+    #[Route('/new/{id}', name: 'app_event_seminar_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, Seminario $seminario): Response
     {
-        if ($token !== $_ENV['SEMINARIO_TOKEN']) {
-
-            $this->addFlash(
-                'danger',
-                'Debe tener credenciales para crear un nuevo evento!'
-            );
-
-            return $this->redirectToRoute('app_event_seminar_index', [], Response::HTTP_SEE_OTHER);
+        if (!$this->isAuthorized($request)) {
+            $this->addFlash('danger', 'Debe tener credenciales para crear un nuevo evento.');
+            return $this->redirectToRoute('app_seminario_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $eventSeminar = new EventSeminar();
-
-        // Initial data from Seminario
         $eventSeminar->setSeminar($seminario);
-        $organizers = $seminario->getOrganizers()->toArray(); // Convert Doctrine Collection to array
 
-        // Get Seminar Start Date & Time
+        $organizers = $seminario->getOrganizers()->toArray();
         $eventSeminar->setOrganizers(implode(', ', array_map(fn($o) => $o->getName(), $organizers)));
-        //$eventSeminar->setStart($seminario->getStart());
+        $eventSeminar->setLocation($seminario->getLocation());
+
         $dateStart = new \DateTime('now');
         $startTime = new \DateTime($seminario->getStart()->format('H:i'));
-
-        //Set location
-        $eventSeminar->setLocation($seminario->getLocation());
 
         $form = $this->createForm(EventSeminarType::class, $eventSeminar, [
             'default_time' => $startTime,
@@ -72,27 +69,20 @@ final class EventSeminarController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Get the date and time from the form
             $date = $form->get('start_date')->getData();
             $time = $form->get('start_time')->getData();
             $duration = $form->get('event_duration')->getData();
 
-            // Merge them into a single DateTime object
             $dateTimeStart = new \DateTime($date->format('Y-m-d') . ' ' . $time->format('H:i:s'));
             $dateTimeEnd = (clone $dateTimeStart)->modify("+{$duration} hours");
 
-            // Set start and end of Event in \Datetime format
             $eventSeminar->setStart($dateTimeStart);
             $eventSeminar->setEnd($dateTimeEnd);
 
             $entityManager->persist($eventSeminar);
             $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                'El evento se registró exitosamente!'
-            );
+            $this->addFlash('success', 'El evento se registró exitosamente.');
 
             return $this->redirectToRoute('app_event_seminar_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -114,50 +104,39 @@ final class EventSeminarController extends AbstractController
     #[Route('/{slug}/edit', name: 'app_event_seminar_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EventSeminar $eventSeminar, EntityManagerInterface $entityManager): Response
     {
-        // Check if the event's start date is in the past
+        if (!$this->isAuthorized($request)) {
+            $this->addFlash('danger', 'Debe tener credenciales para editar un evento.');
+            return $this->redirectToRoute('app_seminario_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($eventSeminar->getStart() < new \DateTime()) {
-
-            $this->addFlash(
-                'warning',
-                'No se puede modificar un evento pasado!'
-            );
-
+            $this->addFlash('warning', 'No se puede modificar un evento pasado.');
             return $this->redirectToRoute('app_event_seminar_show', ['slug' => $eventSeminar->getSlug()]);
         }
 
-        $startDateStr = $eventSeminar->getStart()->format('Y-m-d');
-        $startTimeStr = $eventSeminar->getStart()->format('H:i:s');
-        $startDate = new \DateTime($startDateStr);
-        $startTime = new \DateTime($startTimeStr);
+        $startDate = new \DateTime($eventSeminar->getStart()->format('Y-m-d'));
+        $startTime = new \DateTime($eventSeminar->getStart()->format('H:i:s'));
 
         $form = $this->createForm(EventSeminarType::class, $eventSeminar, [
             'default_date' => $startDate,
             'default_time' => $startTime,
         ]);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Get the date and time from the form
             $date = $form->get('start_date')->getData();
             $time = $form->get('start_time')->getData();
             $duration = $form->get('event_duration')->getData();
 
-            // Merge them into a single DateTime object
             $dateTimeStart = new \DateTime($date->format('Y-m-d') . ' ' . $time->format('H:i:s'));
             $dateTimeEnd = (clone $dateTimeStart)->modify("+{$duration} hours");
 
-            // Set start and end of Event in \Datetime format
             $eventSeminar->setStart($dateTimeStart);
             $eventSeminar->setEnd($dateTimeEnd);
 
             $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                'El evento se modificó correctamente!'
-            );
+            $this->addFlash('success', 'El evento se modificó correctamente.');
 
             return $this->redirectToRoute('app_event_seminar_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -168,7 +147,7 @@ final class EventSeminarController extends AbstractController
         ]);
     }
 
-   #[Route('/consulta/json', name: 'event_seminar_json', methods: ['GET'])]
+    #[Route('/consulta/json', name: 'event_seminar_json', methods: ['GET'])]
     public function getEvents(EventSeminarRepository $eventSeminarRepository): JsonResponse
     {
         $events = $eventSeminarRepository->findAll();
@@ -187,16 +166,13 @@ final class EventSeminarController extends AbstractController
                 ],
             ];
         }
+
         return new JsonResponse($responseArray);
     }
 
     #[Route('/{slug}/calendar', name: 'event_calendar_export')]
     public function exportEventToCalendar(EventSeminar $event): Response
     {
-        if (!$event) {
-            throw $this->createNotFoundException('Event not found.');
-        }
-
         $description = <<<TEXT
 {$event->getTitle()}
 {$event->getSpeaker()} - {$event->getInstitution()}
@@ -204,7 +180,6 @@ final class EventSeminarController extends AbstractController
 {$event->getAbstract()}
 TEXT;
 
-// Escape line breaks and special characters for ICS
         $description = preg_replace("/(\r\n|\r|\n)/", "\\n", $description);
         $description = addcslashes($description, ",;");
 
@@ -233,11 +208,21 @@ ICS;
     #[Route('/{id}', name: 'app_event_seminar_delete', methods: ['POST'])]
     public function delete(Request $request, EventSeminar $eventSeminar, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isAuthorized($request)) {
+            $this->addFlash('danger', 'Debe tener credenciales para eliminar un evento.');
+            return $this->redirectToRoute('app_seminario_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($this->isCsrfTokenValid('delete'.$eventSeminar->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($eventSeminar);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_event_seminar_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function isAuthorized(Request $request): bool
+    {
+        return $request->getSession()->get('ccm_authorized') === true;
     }
 }

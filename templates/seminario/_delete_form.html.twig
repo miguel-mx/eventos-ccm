@@ -1,4 +1,6 @@
-<form method="post" action="{{ path('app_seminario_delete', {'id': seminario.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form method="post" action="{{ path('app_seminario_delete', {'id': seminario.id}) }}" onsubmit="return confirm('¿Eliminar este seminario? Esta acción no se puede deshacer.');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ seminario.id) }}">
-    <button class="btn">Delete</button>
+    <button type="submit" class="btn-link-danger">
+        <i class="bi bi-trash3"></i> Eliminar seminario
+    </button>
 </form>

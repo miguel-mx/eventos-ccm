@@ -16,6 +16,16 @@ class SeminarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Seminario::class);
     }
 
+    public function findOtherSeminarios(Seminario $seminario): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s != :current')
+            ->setParameter('current', $seminario)
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Seminario[] Returns an array of Seminario objects
     //     */

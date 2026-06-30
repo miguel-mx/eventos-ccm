@@ -1,20 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit EventSeminar{% endblock %}
+{% block title %}Editar Evento · CCM{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
+<div class="page-wrap">
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6 mb-5">
-                <h2>{{ event_seminar.title }}</h2>
-            </div>
-        </div>
+    <div class="page-header">
+        <a href="{{ path('app_event_seminar_show', {slug: event_seminar.slug}) }}" class="breadcrumb-link">← {{ event_seminar.title }}</a>
+        <h1 class="page-title">Editar evento</h1>
+    </div>
 
-        {{ include('event_seminar/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('event_seminar/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
 
-        <a href="{{ path('app_event_seminar_index') }}">back to list</a>
-
+    <div class="page-actions">
+        <a href="{{ path('app_event_seminar_show', {slug: event_seminar.slug}) }}" class="action-link">← Cancelar</a>
         {{ include('event_seminar/_delete_form.html.twig') }}
     </div>
+
+</div>
 {% endblock %}

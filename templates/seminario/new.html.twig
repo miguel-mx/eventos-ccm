@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Seminario{% endblock %}
+{% block title %}Nuevo Seminario · CCM{% endblock %}
 
 {% block body %}
-    <h1>Create new Seminario</h1>
+<div class="page-wrap">
 
-    {{ include('seminario/_form.html.twig') }}
+    <div class="page-header">
+        <a href="{{ path('app_seminario_index') }}" class="breadcrumb-link">← Seminarios</a>
+        <h1 class="page-title">Nuevo seminario</h1>
+    </div>
 
-    <a href="{{ path('app_seminario_index') }}">back to list</a>
+    <div class="form-wrap">
+        {{ include('seminario/_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}
