@@ -16,7 +16,7 @@ use Knp\Component\Pager\PaginatorInterface;
 
 final class EventSeminarController extends AbstractController
 {
-    #[Route('/todos', name: 'app_event_seminar_index', methods: ['GET'])]
+    #[Route('/todos-los-eventos', name: 'app_event_seminar_index', methods: ['GET'])]
     public function index(EventSeminarRepository $eventSeminarRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $q = trim($request->query->get('q', ''));
