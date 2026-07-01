@@ -14,10 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Knp\Component\Pager\PaginatorInterface;
 
-#[Route('/eventos')]
 final class EventSeminarController extends AbstractController
 {
-    #[Route(name: 'app_event_seminar_index', methods: ['GET'])]
+    #[Route('/todos', name: 'app_event_seminar_index', methods: ['GET'])]
     public function index(EventSeminarRepository $eventSeminarRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $q = trim($request->query->get('q', ''));
@@ -43,6 +42,7 @@ final class EventSeminarController extends AbstractController
     {
         return $this->render('event_seminar/calendario.html.twig');
     }
+
 
     #[Route('/new/{id}', name: 'app_event_seminar_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Seminario $seminario): Response
@@ -162,7 +162,7 @@ final class EventSeminarController extends AbstractController
                 'extendedProps' => [
                     'description' => $event->getSeminar()->getName(),
                     'speaker' => $event->getSpeaker(),
-                    'url' => '/eventos/' . $event->getSlug(),
+                    'url' => $this->generateUrl('app_event_seminar_show', ['slug' => $event->getSlug()]),
                 ],
             ];
         }
