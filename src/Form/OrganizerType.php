@@ -19,8 +19,9 @@ class OrganizerType extends AbstractType
             ->add('institution')
             ->add('seminario', EntityType::class, [
                 'class' => Seminario::class,
-                'choice_label' => 'name', // 👈 Displays seminar name instead of ID
-                'placeholder' => 'Select a Seminar', // 👈 Optional: Default dropdown text
+                'choice_label' => 'name',
+                'placeholder' => 'Sin seminario asignado',
+                'required' => false,
             ])
         ;
     }

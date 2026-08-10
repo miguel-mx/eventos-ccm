@@ -1,39 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Organizer index{% endblock %}
+{% block title %}Organizadores · CCM{% endblock %}
 
 {% block body %}
-    <div class="container py-5">
+<div class="page-wrap">
 
-    <h1 class="mb-3">Seminarios CCM</h1>
-    <h3 class="mb-5">Organizadores</h3>
+    <div class="page-header-row page-header">
+        <h1 class="page-title">Organizadores</h1>
+    </div>
 
-    <table class="table">
+    <table class="organizer-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th class="organizer-col-institution">Institución</th>
                 <th>Seminario</th>
             </tr>
         </thead>
         <tbody>
         {% for organizer in organizers %}
             <tr>
-                <td><a href="{{ path('app_organizer_show', {'id': organizer.id}) }}">{{ organizer.name }}</a></td>
+                <td>
+                    <a href="{{ path('app_organizer_show', {'id': organizer.id}) }}" class="organizer-name-link">{{ organizer.name }}</a>
+                </td>
                 <td>{{ organizer.email }}</td>
-                <td>{{ organizer.seminario }}</td>
+                <td class="organizer-col-institution">{{ organizer.institution }}</td>
+                <td>
+                    {% if organizer.seminario %}
+                        <a href="{{ path('app_seminario_show', {'slug': organizer.seminario.slug}) }}" class="organizer-seminario-link">{{ organizer.seminario }}</a>
+                    {% else %}
+                        <span class="organizer-seminario-empty">Sin asignar</span>
+                    {% endif %}
+                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="4" class="empty-state">No se encontraron organizadores.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <div class="my-5">
-        <a href="{{ path('app_organizer_new') }}">New organizer</a>
+    <div class="page-actions">
+        <a href="{{ path('app_organizer_new') }}" class="action-link"><i class="bi bi-plus-circle"></i> Nuevo organizador</a>
     </div>
 
-    </div>
+</div>
 {% endblock %}

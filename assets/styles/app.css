@@ -370,6 +370,60 @@ body {
 
 .seminario-list-item .add-icon:hover { color: var(--accent); }
 
+/* ── Organizer table ────────────────────────────────────── */
+.organizer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.organizer-table th {
+  text-align: left;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.organizer-table td {
+  padding: 0.85rem 0.5rem 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.organizer-table td:first-child,
+.organizer-table th:first-child { padding-left: 0; }
+
+.organizer-name-link {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.organizer-name-link:hover { color: var(--accent); }
+
+.organizer-seminario-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.organizer-seminario-link:hover { color: var(--accent); }
+
+.organizer-seminario-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 575.98px) {
+  .organizer-col-institution { display: none; }
+}
+
 /* ── Pagination ─────────────────────────────────────────── */
 .pagination .page-link {
   color: var(--accent) !important;

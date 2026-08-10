@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Organizer{% endblock %}
+{% block title %}Nuevo organizador · CCM{% endblock %}
 
 {% block body %}
-    <h1>Create new Organizer</h1>
+<div class="page-wrap">
 
-    {{ include('organizer/_form.html.twig') }}
+    <div class="page-header">
+        <a href="{{ path('app_organizer_index') }}" class="breadcrumb-link">← Organizadores</a>
+        <h1 class="page-title">Nuevo organizador</h1>
+    </div>
 
-    ## Agregar organizers - Objeto Seminar
+    <div class="form-wrap">
+        {{ include('organizer/_form.html.twig') }}
+    </div>
 
-    <a href="{{ path('app_organizer_index') }}">back to list</a>
+</div>
 {% endblock %}

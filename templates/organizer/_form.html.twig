@@ -1,4 +1,33 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<p class="form-section-title">Información del organizador</p>
+
+<div class="mb-3">
+    {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.name) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.email, 'Correo electrónico', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.email) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.institution, 'Institución', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.institution, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.institution) }}
+</div>
+
+<div class="mb-4">
+    {{ form_label(form.seminario, 'Seminario (opcional)', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.seminario, {'attr': {'class': 'form-select'}}) }}
+    {{ form_errors(form.seminario) }}
+</div>
+
+<button type="submit" class="btn btn-primary btn-sm px-4">
+    {{ button_label|default('Guardar organizador') }}
+</button>
+
 {{ form_end(form) }}

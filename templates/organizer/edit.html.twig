@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Organizer{% endblock %}
+{% block title %}Editar organizador · CCM{% endblock %}
 
 {% block body %}
-    <h1>Edit Organizer</h1>
+<div class="page-wrap">
 
-    {{ include('organizer/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="page-header">
+        <a href="{{ path('app_organizer_show', {'id': organizer.id}) }}" class="breadcrumb-link">← {{ organizer.name }}</a>
+        <h1 class="page-title">Editar organizador</h1>
+    </div>
 
-    <a href="{{ path('app_organizer_index') }}">back to list</a>
+    <div class="form-wrap">
+        {{ include('organizer/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+    </div>
 
-    {{ include('organizer/_delete_form.html.twig') }}
+    <div class="page-actions">
+        <a href="{{ path('app_organizer_show', {'id': organizer.id}) }}" class="action-link">← Cancelar</a>
+        {{ include('organizer/_delete_form.html.twig') }}
+    </div>
+
+</div>
 {% endblock %}
