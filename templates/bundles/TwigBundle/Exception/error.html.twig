@@ -80,7 +80,7 @@
 </head>
 <body>
     <header class="site-header">
-        <a href="/" class="site-name">Centro de Ciencias Matemáticas &middot; UNAM</a>
+        <a href="{{ path('app_home') }}" class="site-name">Centro de Ciencias Matemáticas &middot; UNAM</a>
     </header>
 
     <div class="page-wrap">
@@ -88,7 +88,7 @@
             <div class="error-code">{{ status_code }}</div>
             <h1>{{ status_text }}</h1>
             <p>Ha ocurrido un error inesperado. Si el problema persiste, contacta al administrador del sistema.</p>
-            <a href="/" class="back-link">← Regresar al inicio</a>
+            <a href="{{ path('app_home') }}" class="back-link">← Regresar al inicio</a>
         </div>
     </div>
 </body>

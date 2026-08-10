@@ -93,7 +93,7 @@ final class EventSeminarController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_event_seminar_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_event_seminar_show', methods: ['GET'], priority: -1)]
     public function show(EventSeminar $eventSeminar): Response
     {
         return $this->render('event_seminar/show.html.twig', [

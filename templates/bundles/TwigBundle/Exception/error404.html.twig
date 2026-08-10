@@ -95,7 +95,7 @@
 </head>
 <body>
     <header class="site-header">
-        <a href="/" class="site-name">Centro de Ciencias Matemáticas &middot; UNAM</a>
+        <a href="{{ path('app_home') }}" class="site-name">Centro de Ciencias Matemáticas &middot; UNAM</a>
     </header>
 
     <div class="page-wrap">
@@ -104,9 +104,9 @@
             <h1>Página no encontrada</h1>
             <p>La dirección que buscas no existe o fue movida.</p>
             <div class="links">
-                <a href="/" class="back-link">← Regresar al inicio</a>
-                <a href="/todos" class="alt-link">Ver todos los eventos</a>
-                <a href="/seminario" class="alt-link">Ver seminarios</a>
+                <a href="{{ path('app_home') }}" class="back-link">← Regresar al inicio</a>
+                <a href="{{ path('app_event_seminar_index') }}" class="alt-link">Ver todos los eventos</a>
+                <a href="{{ path('app_seminario_index') }}" class="alt-link">Ver seminarios</a>
             </div>
         </div>
     </div>
